@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h1>APIの利用</h1>
+<button id="btn1">商品情報の取得</button>
+<hr />
+商品ID:<input type="number" id="itemId"/>
+<br />
+商品名:<input type="text" id="itemName"/>
+<br />
+<button id="btn2">追加</button>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+<script>
+const API_URL = 'http://localhost:8080/api/items';
+$('#btn1').click(function(){
+	$.ajax({
+		url: API_URL,
+		type: 'GET'
+	})
+	.done(function(res){
+		console.log(res);
+	})
+	.fail(function(){
+		alert('通信失敗');
+	});
+});//#btn1.click
+$('#btn2').click(function(){
+	//入力値の取得
+	const itemId = $('#itemId').val();
+	const itemName = $('#itemName').val();
+	//必要に応じてバリデーション
+	
+	//一つのオブジェクトにまとめる
+	const item = {
+					id: itemId,
+					name: itemName
+				};
+	//Ajaxを通じて送信
+	$.ajax({
+		url: API_URL,
+		type: 'POST',
+		data: JSON.stringify(item),
+		contentType: 'application/json;character=UTF-8'
+	})
+	.done(function(){
+		//商品リストを表示
+		//→btn1をクリック
+		$('#btn1').trigger('click');
+	})
+	.fail(function(){
+		alert('通信失敗');
+	});
+});//#btn2.click
+</script>
+</html>
